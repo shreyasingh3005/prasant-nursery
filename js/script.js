@@ -1,25 +1,29 @@
-/**
- * Prashant Nursery — Core Client-Side Scripts
- * Mobile menu, sticky header, gallery lightbox, quote form handler,
- * dynamic image folder scanner, infinite marquee, and WhatsApp Lead Prompt.
- */
-
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Mobile Drawer Navigation
+  // 1. Sticky Header Elevation
+  const header = document.querySelector('.site-header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+
+  // 2. Mobile Nav Drawer
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const closeDrawerBtn = document.getElementById('closeDrawerBtn');
   const mobileDrawer = document.getElementById('mobileDrawer');
   const mobileOverlay = document.getElementById('mobileOverlay');
 
   function openDrawer() {
-    mobileDrawer.classList.add('active');
-    mobileOverlay.classList.add('active');
+    if (mobileDrawer) mobileDrawer.classList.add('active');
+    if (mobileOverlay) mobileOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
 
   function closeDrawer() {
-    mobileDrawer.classList.remove('active');
-    mobileOverlay.classList.remove('active');
+    if (mobileDrawer) mobileDrawer.classList.remove('active');
+    if (mobileOverlay) mobileOverlay.classList.remove('active');
     document.body.style.overflow = '';
   }
 
@@ -27,46 +31,45 @@ document.addEventListener('DOMContentLoaded', () => {
   if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
   if (mobileOverlay) mobileOverlay.addEventListener('click', closeDrawer);
 
-  // 2. Sticky Header Elevation
-  const siteHeader = document.querySelector('.site-header');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 30) {
-      siteHeader.classList.add('scrolled');
-    } else {
-      siteHeader.classList.remove('scrolled');
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeDrawer();
+      closeLightbox();
     }
   });
 
-  // 3. Lightbox Setup
+  // 3. Lightbox Viewer
   const lightbox = document.getElementById('galleryLightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxCaption = document.getElementById('lightboxCaption');
   const lightboxClose = document.getElementById('lightboxClose');
 
-  function openLightbox(src, title) {
+  function openLightbox(src, caption) {
     if (lightbox && lightboxImg) {
       lightboxImg.src = src;
-      if (lightboxCaption) lightboxCaption.innerText = title || 'Prashant Nursery';
+      if (lightboxCaption) lightboxCaption.textContent = caption || 'Prashant Nursery Farm View';
       lightbox.classList.add('active');
     }
   }
 
-  if (lightboxClose) {
-    lightboxClose.addEventListener('click', () => {
+  function closeLightbox() {
+    if (lightbox) {
       lightbox.classList.remove('active');
-    });
+    }
   }
 
+  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
   if (lightbox) {
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox) {
-        lightbox.classList.remove('active');
+        closeLightbox();
       }
     });
   }
 
   // 4. AUTOMATIC IMAGE FOLDER SCANNER & LOOP POPULATOR
-  const loopTrack = document.getElementById('autoImageLoop');
+  // Supports multiple .loop-track elements across any page!
+  const loopTracks = document.querySelectorAll('.loop-track, #autoImageLoop');
   const dynamicGalleryGrid = document.getElementById('dynamicGalleryGrid');
 
   const defaultImages = [
@@ -82,18 +85,21 @@ document.addEventListener('DOMContentLoaded', () => {
       images = defaultImages;
     }
 
-    if (loopTrack) {
-      loopTrack.innerHTML = '';
-      const loopSet = images.length < 6 ? images.concat(images, images) : images.concat(images);
-      loopSet.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'loop-card';
-        card.innerHTML = `
-          <img src="${item.src}" alt="${item.title}" loading="lazy">
-          <div class="loop-badge">${item.title}</div>
-        `;
-        card.addEventListener('click', () => openLightbox(item.src, item.title));
-        loopTrack.appendChild(card);
+    if (loopTracks.length > 0) {
+      loopTracks.forEach(track => {
+        track.innerHTML = '';
+        // Duplicate array so it seamlessly scrolls infinitely without gaps
+        const loopSet = images.length < 6 ? images.concat(images, images) : images.concat(images);
+        loopSet.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'loop-card';
+          card.innerHTML = `
+            <img src="${item.src}" alt="${item.title}" loading="lazy">
+            <div class="loop-badge">${item.title}</div>
+          `;
+          card.addEventListener('click', () => openLightbox(item.src, item.title));
+          track.appendChild(card);
+        });
       });
     }
 
@@ -140,61 +146,33 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
-  // 5. Existing static gallery items click handling
-  document.querySelectorAll('.gallery-item:not(#dynamicGalleryGrid .gallery-item)').forEach(item => {
-    item.addEventListener('click', () => {
-      const img = item.querySelector('img');
-      const caption = item.querySelector('.gallery-overlay h4')?.innerText || 'Prashant Nursery';
-      if (img) openLightbox(img.src, caption);
+  // 5. Lightbox for static images with [data-zoom]
+  document.querySelectorAll('img[data-zoom]').forEach(img => {
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', () => {
+      openLightbox(img.src, img.alt);
     });
   });
 
-  // 6. Gallery Category Filter
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  if (filterBtns.length > 0) {
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const category = btn.getAttribute('data-filter');
-
-        document.querySelectorAll('.gallery-item').forEach(item => {
-          if (category === 'all' || item.getAttribute('data-cat') === category) {
-            item.style.display = 'block';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-      });
-    });
-  }
-
-  // 7. Contact / Quote Form Handling
+  // 6. Lead Quotation Form Handler
   const quoteForm = document.getElementById('enquiryForm');
   if (quoteForm) {
-    quoteForm.addEventListener('submit', function(e) {
+    quoteForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      
-      const name = document.getElementById('custName').value.trim();
-      const phone = document.getElementById('custPhone').value.trim();
-      const service = document.getElementById('custService').value;
-      const area = document.getElementById('custArea')?.value.trim() || 'Not specified';
-      const location = document.getElementById('custLocation')?.value.trim() || 'Not specified';
-      const message = document.getElementById('custMsg')?.value.trim() || 'No extra notes';
-
-      if (!name || !phone) {
-        showToast('Please enter your name and contact number.');
-        return;
-      }
+      const name = document.getElementById('custName')?.value || 'Customer';
+      const phone = document.getElementById('custPhone')?.value || '';
+      const service = document.getElementById('custService')?.value || 'Natural Turf / Grass';
+      const area = document.getElementById('custArea')?.value || 'Not specified';
+      const location = document.getElementById('custLocation')?.value || 'Not specified';
 
       const waText = encodeURIComponent(
-        `Hi Prashant Nursery,\n` +
-        `New Enquiry From: ${name}\n` +
-        `Phone: ${phone}\n` +
-        `Service Needed: ${service}\n` +
-        `Area/Quantity: ${area}\n` +
-        `Location: ${location}\n` +
-        `Details: ${message}`
+        `*New Inquiry — Prashant Nursery*\n` +
+        `👤 *Name:* ${name}\n` +
+        `📞 *Phone:* ${phone}\n` +
+        `🌱 *Service:* ${service}\n` +
+        `📐 *Area/Quantity:* ${area}\n` +
+        `📍 *Location:* ${location}\n` +
+        `Please send direct farm pricing and delivery details.`
       );
 
       fetch(quoteForm.action || 'send-mail.php', {
@@ -213,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 8. FAQ Accordion Toggle
+  // 7. FAQ Accordion Toggle
   const faqQuestions = document.querySelectorAll('.faq-question');
   faqQuestions.forEach(q => {
     q.addEventListener('click', () => {
@@ -224,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 9. High-Conversion WhatsApp Prompt Trigger
+  // 8. Timed High-Conversion WhatsApp Prompt Trigger
   const waPrompt = document.getElementById('waLeadPrompt');
   const closeWaPrompt = document.getElementById('closeWaPrompt');
   if (waPrompt) {

@@ -7,99 +7,96 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputLength = document.getElementById('calcLength');
   const inputWidth = document.getElementById('calcWidth');
   const inputDirectArea = document.getElementById('calcDirectArea');
-  const rollSizeSelect = document.getElementById('calcRollSize');
 
+  const resBaseArea = document.getElementById('resBaseArea');
   const resTotalArea = document.getElementById('resTotalArea');
-  const resRolls = document.getElementById('resRolls');
-  const resBufferArea = document.getElementById('resBufferArea');
-  const resEstPrice = document.getElementById('resEstPrice');
-  const btnShareEstimate = document.getElementById('btnShareEstimate');
+  const resRolls10 = document.getElementById('resRolls10');
+  const resRolls20 = document.getElementById('resRolls20');
+  const resRolls30 = document.getElementById('resRolls30');
+  const resRolls40 = document.getElementById('resRolls40');
+  const calcWaBtn = document.getElementById('calcWaBtn');
+  const presetBtns = document.querySelectorAll('.preset-btn');
 
-  const BASE_PRICE_PER_SQFT = 18; // In INR (₹)
-  let activeMode = 'lw';
-
-  function updateMode(mode) {
-    activeMode = mode;
-    if (mode === 'lw') {
-      calcModeLw?.classList.add('active');
-      calcModeDirect?.classList.remove('active');
-      if (lwInputs) lwInputs.style.display = 'grid';
-      if (directInput) directInput.style.display = 'none';
-    } else {
-      calcModeLw?.classList.remove('active');
-      calcModeDirect?.classList.add('active');
-      if (lwInputs) lwInputs.style.display = 'none';
-      if (directInput) directInput.style.display = 'block';
-    }
-    calculateTurf();
-  }
+  let currentMode = 'lw';
 
   if (calcModeLw && calcModeDirect) {
-    calcModeLw.addEventListener('click', () => updateMode('lw'));
-    calcModeDirect.addEventListener('click', () => updateMode('direct'));
+    calcModeLw.addEventListener('click', () => {
+      currentMode = 'lw';
+      calcModeLw.classList.add('active');
+      calcModeDirect.classList.remove('active');
+      lwInputs.style.display = 'grid';
+      directInput.style.display = 'none';
+      recalc();
+    });
+
+    calcModeDirect.addEventListener('click', () => {
+      currentMode = 'direct';
+      calcModeDirect.classList.add('active');
+      calcModeLw.classList.remove('active');
+      lwInputs.style.display = 'none';
+      directInput.style.display = 'block';
+      recalc();
+    });
   }
 
-  // Handle Quick Size Presets (Conversion Booster)
-  const presetBtns = document.querySelectorAll('.preset-btn');
+  // Preset Buttons Handling
   presetBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      const presetSqft = parseFloat(btn.getAttribute('data-sqft'));
-      if (presetSqft) {
-        updateMode('direct');
-        if (inputDirectArea) inputDirectArea.value = presetSqft;
-        calculateTurf();
+      presetBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const val = parseFloat(btn.getAttribute('data-preset'));
+
+      if (currentMode === 'lw') {
+        // Approximate square dimensions
+        const side = Math.round(Math.sqrt(val));
+        const otherSide = Math.round(val / side);
+        if (inputLength) inputLength.value = side;
+        if (inputWidth) inputWidth.value = otherSide;
+      } else {
+        if (inputDirectArea) inputDirectArea.value = val;
       }
+      recalc();
     });
   });
 
-  function calculateTurf() {
-    let rawArea = 0;
-    if (activeMode === 'lw') {
-      const len = parseFloat(inputLength?.value) || 0;
-      const wid = parseFloat(inputWidth?.value) || 0;
-      rawArea = len * wid;
+  function recalc() {
+    let baseArea = 0;
+    if (currentMode === 'lw') {
+      const l = parseFloat(inputLength?.value) || 0;
+      const w = parseFloat(inputWidth?.value) || 0;
+      baseArea = l * w;
     } else {
-      rawArea = parseFloat(inputDirectArea?.value) || 0;
+      baseArea = parseFloat(inputDirectArea?.value) || 0;
     }
 
-    if (rawArea <= 0) {
-      if (resTotalArea) resTotalArea.textContent = '0 sq ft';
-      if (resBufferArea) resBufferArea.textContent = '0 sq ft';
-      if (resRolls) resRolls.textContent = '0 rolls';
-      if (resEstPrice) resEstPrice.textContent = '₹0';
-      return;
-    }
+    const totalWithBuffer = Math.ceil(baseArea * 1.10);
 
-    const bufferArea = Math.ceil(rawArea * 1.10);
-    const rollTier = parseInt(rollSizeSelect?.value) || 10;
-    const totalRolls = Math.ceil(bufferArea / rollTier);
-    const estPrice = bufferArea * BASE_PRICE_PER_SQFT;
+    if (resBaseArea) resBaseArea.textContent = baseArea > 0 ? baseArea : '0';
+    if (resTotalArea) resTotalArea.textContent = totalWithBuffer > 0 ? totalWithBuffer : '0';
 
-    if (resTotalArea) resTotalArea.textContent = `${Math.round(rawArea)} sq ft`;
-    if (resBufferArea) resBufferArea.textContent = `${bufferArea} sq ft`;
-    if (resRolls) resRolls.textContent = `${totalRolls} rolls (${rollTier} sq ft each)`;
-    if (resEstPrice) resEstPrice.textContent = `₹${estPrice.toLocaleString('en-IN')}`;
+    if (resRolls10) resRolls10.textContent = totalWithBuffer > 0 ? Math.ceil(totalWithBuffer / 10) : '0';
+    if (resRolls20) resRolls20.textContent = totalWithBuffer > 0 ? Math.ceil(totalWithBuffer / 20) : '0';
+    if (resRolls30) resRolls30.textContent = totalWithBuffer > 0 ? Math.ceil(totalWithBuffer / 30) : '0';
+    if (resRolls40) resRolls40.textContent = totalWithBuffer > 0 ? Math.ceil(totalWithBuffer / 40) : '0';
 
-    if (btnShareEstimate) {
-      const msg = encodeURIComponent(
-        `Hi Prashant Nursery,\n` +
-        `I calculated my natural turf requirement:\n` +
-        `- Lawn Area: ${Math.round(rawArea)} sq ft\n` +
-        `- With +10% Cutting Buffer: ${bufferArea} sq ft\n` +
-        `- Roll Tier: ${rollTier} sq ft (~${totalRolls} rolls)\n` +
-        `- Estimate: ~₹${estPrice.toLocaleString('en-IN')}\n\n` +
-        `Please confirm farm availability, delivery rate, and laying schedule.`
-      );
-      btnShareEstimate.href = `https://wa.me/917398869340?text=${msg}`;
+    if (calcWaBtn) {
+      if (baseArea > 0) {
+        const text = encodeURIComponent(
+          `Hi Prashant Nursery, I used your Turf Calculator.\n` +
+          `Lawn Area: ${baseArea} sq ft\n` +
+          `Recommended Order with Buffer: ${totalWithBuffer} sq ft (~${Math.ceil(totalWithBuffer / 20)} rolls of 20 sq ft).\n` +
+          `Please share your best direct farm rate and delivery estimate.`
+        );
+        calcWaBtn.href = `https://wa.me/917398869340?text=${text}`;
+      } else {
+        calcWaBtn.href = `https://wa.me/917398869340?text=Hi%20Prashant%20Nursery%2C%20I%20need%20a%20price%20quote%20for%20natural%20grass%20turf`;
+      }
     }
   }
 
-  [inputLength, inputWidth, inputDirectArea, rollSizeSelect].forEach(input => {
-    if (input) {
-      input.addEventListener('input', calculateTurf);
-      input.addEventListener('change', calculateTurf);
-    }
-  });
+  if (inputLength) inputLength.addEventListener('input', recalc);
+  if (inputWidth) inputWidth.addEventListener('input', recalc);
+  if (inputDirectArea) inputDirectArea.addEventListener('input', recalc);
 
-  calculateTurf();
+  recalc();
 });
