@@ -1,7 +1,7 @@
 /**
  * Prashant Nursery — Core Client-Side Scripts
- * Mobile menu toggle, sticky header, gallery lightbox, form handler,
- * and AUTOMATIC IMAGE SCANNING & INFINITE LOOP TRACK.
+ * Mobile menu, sticky header, gallery lightbox, quote form handler,
+ * dynamic image folder scanner, infinite marquee, and WhatsApp Lead Prompt.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 3. Lightbox setup
+  // 3. Lightbox Setup
   const lightbox = document.getElementById('galleryLightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxCaption = document.getElementById('lightboxCaption');
@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 4. AUTOMATIC IMAGE FOLDER SCANNER & LOOP POPULATOR
-  // Scans get-images.php (Hostinger live), falls back to images/images.json or default array
   const loopTrack = document.getElementById('autoImageLoop');
   const dynamicGalleryGrid = document.getElementById('dynamicGalleryGrid');
 
@@ -83,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
       images = defaultImages;
     }
 
-    // A. Render into Infinite Auto-scrolling Loop (duplicated for seamless 100% infinite scroll)
     if (loopTrack) {
       loopTrack.innerHTML = '';
       const loopSet = images.length < 6 ? images.concat(images, images) : images.concat(images);
@@ -99,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // B. Render into Dynamic Gallery Grid
     if (dynamicGalleryGrid) {
       dynamicGalleryGrid.innerHTML = '';
       images.forEach(item => {
@@ -119,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // First try get-images.php (Live PHP folder scanner on Hostinger)
   fetch('get-images.php')
     .then(res => res.json())
     .then(images => {
@@ -215,6 +211,35 @@ document.addEventListener('DOMContentLoaded', () => {
         window.open(`https://wa.me/917398869340?text=${waText}`, '_blank');
       });
     });
+  }
+
+  // 8. FAQ Accordion Toggle
+  const faqQuestions = document.querySelectorAll('.faq-question');
+  faqQuestions.forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!isActive) item.classList.add('active');
+    });
+  });
+
+  // 9. High-Conversion WhatsApp Prompt Trigger
+  const waPrompt = document.getElementById('waLeadPrompt');
+  const closeWaPrompt = document.getElementById('closeWaPrompt');
+  if (waPrompt) {
+    setTimeout(() => {
+      if (!sessionStorage.getItem('waPromptDismissed')) {
+        waPrompt.style.display = 'block';
+      }
+    }, 4500);
+
+    if (closeWaPrompt) {
+      closeWaPrompt.addEventListener('click', () => {
+        waPrompt.style.display = 'none';
+        sessionStorage.setItem('waPromptDismissed', 'true');
+      });
+    }
   }
 });
 

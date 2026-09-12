@@ -39,6 +39,19 @@ document.addEventListener('DOMContentLoaded', () => {
     calcModeDirect.addEventListener('click', () => updateMode('direct'));
   }
 
+  // Handle Quick Size Presets (Conversion Booster)
+  const presetBtns = document.querySelectorAll('.preset-btn');
+  presetBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const presetSqft = parseFloat(btn.getAttribute('data-sqft'));
+      if (presetSqft) {
+        updateMode('direct');
+        if (inputDirectArea) inputDirectArea.value = presetSqft;
+        calculateTurf();
+      }
+    });
+  });
+
   function calculateTurf() {
     let rawArea = 0;
     if (activeMode === 'lw') {
@@ -70,12 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnShareEstimate) {
       const msg = encodeURIComponent(
         `Hi Prashant Nursery,\n` +
-        `I calculated natural turf requirement for my lawn:\n` +
-        `- Net Lawn Area: ${Math.round(rawArea)} sq ft\n` +
-        `- With 10% Wastage Buffer: ${bufferArea} sq ft\n` +
-        `- Roll Size Tier: ${rollTier} sq ft (~${totalRolls} rolls)\n` +
-        `- Estimated Cost: ~₹${estPrice.toLocaleString('en-IN')}\n\n` +
-        `Please confirm grass variety availability, delivery quote, and installation.`
+        `I calculated my natural turf requirement:\n` +
+        `- Lawn Area: ${Math.round(rawArea)} sq ft\n` +
+        `- With +10% Cutting Buffer: ${bufferArea} sq ft\n` +
+        `- Roll Tier: ${rollTier} sq ft (~${totalRolls} rolls)\n` +
+        `- Estimate: ~₹${estPrice.toLocaleString('en-IN')}\n\n` +
+        `Please confirm farm availability, delivery rate, and laying schedule.`
       );
       btnShareEstimate.href = `https://wa.me/917398869340?text=${msg}`;
     }

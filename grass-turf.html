@@ -28,19 +28,18 @@
     </div>
   </div>
 
-  <!-- Header -->
+  <!-- Header: Single Line Layout -->
   <header class="site-header">
     <div class="container header-wrapper">
-      <a href="index.html" class="brand-logo">
+      <a href="index.html" class="brand-logo" aria-label="Prashant Nursery Home">
         <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66C7.57 17.5 9.3 12.5 17 10.5V8m-2-6C8.5 2 3.5 6.5 3 13.5h2c.46-5.8 4.6-9.5 10-9.5V2m5 10c0-4.4-3.6-8-8-8v2c3.3 0 6 2.7 6 6h2z"/></svg>
-        <div>
-          <div class="brand-text">
+        <div class="brand-text">
           <span class="brand-name">Prashant Nursery</span>
           <span class="brand-subtitle">Natural Turf & Plant Farm</span>
         </div>
-        </div>
       </a>
-      <nav class="main-nav">
+
+      <nav class="main-nav" aria-label="Primary Navigation">
         <ul class="nav-links">
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About Us</a></li>
@@ -53,10 +52,19 @@
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
+
       <div class="header-cta-group">
-        <a href="tel:7398869340" class="btn btn-primary btn-sm">Call 7398869340</a>
+        <a href="tel:7398869340" class="btn btn-primary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          Call: 7398869340
+        </a>
       </div>
-      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open Mobile Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </header>
 
@@ -81,7 +89,7 @@
       </div>
     </div>
     <div class="mobile-drawer-cta">
-      <a href="tel:7398869340" class="btn btn-primary">📞 Call Now: 7398869340</a>
+      <a href="tel:7398869340" class="btn btn-primary">📞 Call: 7398869340</a>
       <a href="https://wa.me/917398869340?text=Hi%2C%20I%27m%20interested%20in%20natural%20grass%2Fturf" class="btn btn-whatsapp">💬 WhatsApp Us</a>
     </div>
   </div>
@@ -104,7 +112,26 @@
     </div>
   </section>
 
-  <!-- Interactive Grass Calculator -->
+  <!-- HIGH-CONVERSION BANNER: SEND LAWN PHOTO ON WHATSAPP -->
+  <div class="container">
+    <div class="photo-estimate-banner">
+      <div class="photo-estimate-content">
+        <span class="section-tag" style="background: rgba(255,255,255,0.2); color: #fff;">Free Measurement Help</span>
+        <h3>Don't Know Your Lawn Size? We Can Calculate It!</h3>
+        <p>Just click a photo or short video of your lawn/garden from your phone and send it to our WhatsApp. Our turf specialists will calculate the exact square footage and give you an instant quote!</p>
+      </div>
+      <div class="photo-estimate-actions">
+        <a href="https://wa.me/917398869340?text=Hi%20Prashant%20Nursery%2C%20I%20am%20sharing%20photos%20of%20my%20garden%20%E2%80%94%20please%20calculate%20how%20much%20grass%20I%20need" target="_blank" rel="noopener" class="btn btn-whatsapp btn-lg">
+          📸 WhatsApp Garden Photo
+        </a>
+        <a href="tel:7398869340" class="btn btn-soil btn-lg">
+          📞 Call: 7398869340
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Grass Calculator with Quick Presets -->
   <section class="section-py section-bg-alt" id="calculator">
     <div class="container">
       <div class="section-header">
@@ -114,6 +141,15 @@
       </div>
 
       <div class="calculator-box">
+        <!-- Quick Size Presets (Conversion Booster) -->
+        <p style="font-size: 0.85rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px;">⚡ Quick Select Common Lawn Sizes:</p>
+        <div class="calc-preset-bar">
+          <button type="button" class="preset-btn" data-sqft="200">🏡 Terrace / Balcony (200 sq ft)</button>
+          <button type="button" class="preset-btn" data-sqft="500">🌿 Front Yard (500 sq ft)</button>
+          <button type="button" class="preset-btn" data-sqft="1000">🌳 Large Lawn (1,000 sq ft)</button>
+          <button type="button" class="preset-btn" data-sqft="2500">🏰 Villa / Farmhouse (2,500 sq ft)</button>
+        </div>
+
         <div class="calc-tabs">
           <button type="button" class="calc-tab-btn active" id="calcModeLw">Dimensions (Length × Width)</button>
           <button type="button" class="calc-tab-btn" id="calcModeDirect">Direct Square Footage</button>
@@ -248,7 +284,124 @@
     </div>
   </section>
 
+  <!-- HIGH-CONVERSION COMPARISON: FARM DIRECT VS MIDDLEMEN -->
+  <section class="comparison-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Why Buy From Prashant Nursery?</span>
+        <h2>Farm Direct vs. Middlemen Nurseries</h2>
+        <p>See why direct procurement from our turf farm guarantees living grass and saves you 30% to 40% on cost.</p>
+      </div>
+
+      <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th class="col-feature">Feature / Quality</th>
+              <th class="col-farm">🚜 Prashant Nursery (Farm Direct)</th>
+              <th class="col-other">🏪 Other Retailers / Resellers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Harvest Freshness</strong></td>
+              <td class="cell-farm">✅ Cut same-day upon customer order</td>
+              <td class="cell-other">❌ Sits on concrete floors for 3–5 days</td>
+            </tr>
+            <tr>
+              <td><strong>Root Soil Retention</strong></td>
+              <td class="cell-farm">✅ 100% intact living root-soil layer</td>
+              <td class="cell-other">❌ Washed roots / dried out dirt</td>
+            </tr>
+            <tr>
+              <td><strong>Transplant Success</strong></td>
+              <td class="cell-farm">✅ Roots firmly within 7–10 days</td>
+              <td class="cell-other">❌ High mortality & yellow dying patches</td>
+            </tr>
+            <tr>
+              <td><strong>Pricing Model</strong></td>
+              <td class="cell-farm">✅ Wholesale farm pricing (10/20/30/40 sq ft)</td>
+              <td class="cell-other">❌ Heavy reseller & distributor markups</td>
+            </tr>
+            <tr>
+              <td><strong>Laying & Mali Support</strong></td>
+              <td class="cell-farm">✅ Full installation & Rent a Mali available</td>
+              <td class="cell-other">❌ Drop-and-leave with zero support</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <!-- FREQUENTLY ASKED QUESTIONS SECTION -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Got Questions?</span>
+        <h2>Frequently Asked Questions</h2>
+        <p>Everything you need to know before ordering farm-fresh natural turf.</p>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item active">
+          <button class="faq-question">
+            <span>How fresh is the grass when delivered?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Our grass is harvested on the morning or evening of delivery directly from our open turf fields. The root-soil mat remains moist and alive, guaranteeing immediate rooting once laid.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>What is the minimum order quantity?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            We cater to all orders! Whether you need a small 100 sq ft patch for a terrace border or 10,000+ sq ft for a farmhouse or villa estate, we provide fast delivery.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Do you provide workers or gardeners to lay the sod?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Yes! In addition to grass supply, our "Rent a Mali" and landscaping team can prepare your ground, grade the soil, fertilize, and lay the turf seamlessly. Call us at 7398869340 for laying quotes.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How do I care for the grass in the first two weeks?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Water generously twice daily (morning and late afternoon) for the first 10-14 days. Avoid heavy foot traffic during the first week so the roots anchor firmly into your ground.
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 30px;">
+        <p style="color: var(--text-muted); margin-bottom: 12px;">Have another question?</p>
+        <a href="tel:7398869340" class="btn btn-primary">📞 Speak With Farm Manager: 7398869340</a>
+      </div>
+    </div>
+  </section>
+
   <script src="js/grass-calculator.js"></script>
+  <!-- WhatsApp Lead Prompt (Conversion Booster) -->
+  <div class="wa-lead-prompt" id="waLeadPrompt">
+    <button class="wa-prompt-close" id="closeWaPrompt">&times;</button>
+    <div class="wa-prompt-content">
+      <strong>👋 Need Farm-Fresh Grass Rate?</strong>
+      <p>Send your lawn size or garden photo on WhatsApp for instant rate & delivery quote!</p>
+      <a href="https://wa.me/917398869340?text=Hi%20Prashant%20Nursery%2C%20I%20want%20to%20get%20a%20quote%20for%20natural%20grass%20turf" target="_blank" rel="noopener" class="btn btn-whatsapp btn-sm" style="width: 100%;">Chat on WhatsApp</a>
+    </div>
+  </div>
+
   <!-- Floating Call & WhatsApp Buttons -->
   <div class="floating-actions-desktop">
     <a href="tel:7398869340" class="fab-btn fab-call" title="Call 7398869340" aria-label="Call Prashant Nursery">
@@ -271,13 +424,22 @@
     </a>
   </div>
 
+  <!-- Lightbox Modal -->
+  <div class="lightbox-modal" id="galleryLightbox">
+    <button class="lightbox-close" id="lightboxClose">&times;</button>
+    <div class="lightbox-content">
+      <img src="" alt="" id="lightboxImg">
+      <h3 id="lightboxCaption" style="color: #fff; font-size: 1.15rem; margin-top: 10px;"></h3>
+    </div>
+  </div>
+
   <!-- Site Footer -->
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
         <h3>Prashant Nursery</h3>
         <p>Authentic natural lawn grass turf farm, landscape architects, and comprehensive nursery supplier. Direct from our fields to your lawn with verified 5-star quality.</p>
-        <p style="color: var(--vibrant-grass); font-weight: 600;">Direct Farm Phone: 7398869340</p>
+        <p style="color: var(--vibrant-grass); font-weight: 600;">Direct Farm Line: 7398869340</p>
       </div>
       <div class="footer-col">
         <h4>Direct Navigation</h4>
@@ -296,9 +458,9 @@
       </div>
       <div class="footer-col">
         <h4>Service Coverage</h4>
-        <p style="font-size: 0.9rem; margin-bottom: 12px;"><strong>Growing & Farm Base:</strong> Saran / Chapra, Bihar</p>
+        <p style="font-size: 0.9rem; margin-bottom: 10px;"><strong>Growing & Farm Base:</strong> Saran / Chapra, Bihar</p>
         <p style="font-size: 0.9rem; margin-bottom: 12px;"><strong>Landscaping & Maintenance:</strong> Delhi NCR & North India supply network</p>
-        <div style="margin-top: 15px;">
+        <div>
           <a href="tel:7398869340" class="btn btn-sm btn-primary">Call 7398869340</a>
         </div>
       </div>
